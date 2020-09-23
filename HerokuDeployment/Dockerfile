@@ -18,4 +18,4 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "HerokuDeployment.dll"]
-RUN chmod -R 777 ./app/Data/AppData.json
+RUN chmod -R 777 /Data/AppData.json

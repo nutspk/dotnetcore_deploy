@@ -9,6 +9,8 @@ using Newtonsoft.Json;
 using System.IO;
 using System.Text;
 using System.Net;
+using System.Text.Json;
+using HerokuDeployment.Models;
 
 namespace HerokuDeployment.Controllers
 {
@@ -44,13 +46,9 @@ namespace HerokuDeployment.Controllers
         }
 
         [Route("[action]")]
-        public async Task AddResponse()
+        public async Task AddResponse([FromBody] LineResponse json)
         {
-            using (var st = new StreamReader(HttpContext.Request.Body))
-            {
-                string body = st.ReadToEnd();
-                await WriteFileAsync(body);
-            }
+            await WriteFileAsync(JsonConvert.SerializeObject(json));
         }
 
         [Obsolete]
@@ -65,7 +63,6 @@ namespace HerokuDeployment.Controllers
 
             using (var sw = fi.AppendText())
             {
-                await sw.WriteLineAsync(DateTime.Now.ToString("DD-MM-YYYY HH:MM"));
                 await sw.WriteLineAsync(Data);
                 await sw.WriteLineAsync("");
             }
